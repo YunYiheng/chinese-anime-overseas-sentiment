@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} · 国产动画海外舆情看板{% endblock %}
+
+{% block body_attrs %} data-form="{{ form }}"{% endblock %}
+
+{% block content %}
+<h4 class="mb-1">{{ title }}（主样本，排除 other）</h4>
+<div class="alert alert-light border small mb-3" id="balanced-strip">加载中…</div>
+
+<!-- 筛选器 -->
+<div class="card mb-4">
+  <div class="card-body py-3">
+    <div class="row g-2 align-items-end">
+      <div class="col-6 col-md-3">
+        <label class="form-label small text-muted">作品</label>
+        <select id="filter-work" class="form-select form-select-sm"></select>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label small text-muted">平台</label>
+        <select id="filter-platform" class="form-select form-select-sm"></select>
+      </div>
+      <div class="col-6 col-md-3">
+        <label class="form-label small text-muted">情感</label>
+        <select id="filter-sentiment" class="form-select form-select-sm"></select>
+      </div>
+      <div class="col-6 col-md-3 d-flex align-items-end gap-2">
+        <button id="btn-reset" class="btn btn-outline-secondary btn-sm">重置</button>
+        <span id="filter-total" class="text-muted small"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 三个筛选联动图 -->
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="card-title">平台样本量</h6>
+      <div class="small text-muted mb-2">灰色柱 = 未准入平台（样本量或作品覆盖不足，仅展示，不进入关联分析）</div>
+      <div id="chart-platform" style="height: 300px;"></div>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="card-title">情感分布（当前筛选内 pooled）</h6>
+      <div id="chart-sentiment" style="height: 300px;"></div>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="card-title">主题命中 Top（多标签）</h6>
+      <div id="chart-topic" style="height: 300px;"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- 关联分析（封版结果，不随筛选变化） -->
+<div class="row g-3 mb-4">
+  <div class="col-md-6">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="card-title">平台 × 情感（计数，准入平台）</h6>
+      <div id="chart-psent" style="height: 320px;"></div>
+    </div></div>
+  </div>
+  <div class="col-md-6">
+    <div class="card h-100"><div class="card-body">
+      <h6 class="card-title">标准化残差热力图（|z|>2.58 强偏离）</h6>
+      <div id="chart-residual" style="height: 320px;"></div>
+    </div></div>
+  </div>
+</div>
+
+<!-- 评论浏览器 -->
+<div class="card">
+  <div class="card-body">
+    <h6 class="card-title">评论浏览器</h6>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover align-middle">
+        <thead class="table-light">
+          <tr>
+            <th style="width:110px">记录编号</th>
+            <th style="width:120px">作品</th>
+            <th style="width:90px">平台</th>
+            <th style="width:70px">情感</th>
+            <th style="width:90px">时间</th>
+            <th>内容</th>
+          </tr>
+        </thead>
+        <tbody id="comments-body"></tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between align-items-center">
+      <span id="comments-info" class="text-muted small"></span>
+      <div>
+        <button id="btn-prev" class="btn btn-sm btn-outline-secondary">上一页</button>
+        <button id="btn-next" class="btn btn-sm btn-outline-secondary">下一页</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/form.js') }}"></script>
+{% endblock %}

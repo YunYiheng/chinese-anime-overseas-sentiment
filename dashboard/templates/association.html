@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Association · 国产动画海外舆情看板{% endblock %}
+
+{% block content %}
+<h4 class="mb-1">关联分析（读 07 封版结果，不重算）</h4>
+<div class="alert alert-light border small mb-3">
+  本页集中展示报告中最具技术含量的统计结论：卡方 χ²、Cramér's V、标准化残差、Bonferroni 校正。
+  所有数字直接来自 <code>07_association_results.xlsx</code>，看板不再独立计算。
+</div>
+
+<!-- ① 平台 × 情感关联 -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">① 平台 × 情感关联</h5>
+    <div class="row g-3 mb-3">
+      <div class="col-md-6" id="psent-series"></div>
+      <div class="col-md-6" id="psent-film"></div>
+    </div>
+    <div class="d-flex gap-2 mb-2" id="resid-toggle">
+      <button class="btn btn-sm btn-outline-primary active" data-form="series">Series</button>
+      <button class="btn btn-sm btn-outline-primary" data-form="film">Film</button>
+    </div>
+    <div id="chart-resid" style="height: 320px;"></div>
+    <div class="small text-muted mt-1">标准化残差：|z|&gt;1.96 显著，|z|&gt;2.58 很强；正=该格偏多，负=偏少。</div>
+  </div>
+</div>
+
+<!-- ② Series vs Film -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">② Series vs Film（仅共有平台 YouTube + X）</h5>
+    <div class="row g-3 align-items-center">
+      <div class="col-md-5" id="sfilm-card"></div>
+      <div class="col-md-7">
+        <div class="alert alert-secondary mb-0 small">
+          在共有平台样本中，作品形态与情感结构<b>未见显著关联</b>（p = 0.565）。
+          <b>该未显著结果同样具有分析价值</b>：Series 与 Film 的整体情感结构并不存在系统性差异。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ Ne Zha shared-title -->
+<div class="card mb-4 border-primary">
+  <div class="card-body">
+    <h5 class="card-title">③ Ne Zha shared-title（同一部《哪吒》跨平台）</h5>
+    <div class="row g-3 align-items-center">
+      <div class="col-md-7">
+        <div id="chart-nezha" style="height: 300px;"></div>
+      </div>
+      <div class="col-md-5">
+        <div id="nezha-kpi"></div>
+        <div class="alert alert-light border small mt-2 mb-0">
+          控制到同一部《哪吒》后，平台间情感差异<b>仍然存在</b>。
+          说明平台差异并非仅由作品本身差异造成。
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ 主题 × 平台 -->
+<div class="card mb-4">
+  <div class="card-body">
+    <h5 class="card-title">④ 主题 × 平台（Bonferroni 校正，α=0.05/12≈0.00417）</h5>
+    <div class="row g-3 mb-3">
+      <div class="col-md-3" id="topic-summary-series"></div>
+      <div class="col-md-3" id="topic-summary-film"></div>
+      <div class="col-md-6">
+        <div class="alert alert-warning small mb-0">
+          <b>confound 提示：</b>主题命中率与评论长度 / 文本体裁高度耦合，
+          因此本表只能说明「哪些主题在哪些平台被更多 / 更少提及」，<b>不能</b>直接解释为平台用户偏好。
+        </div>
+      </div>
+    </div>
+    <div class="d-flex gap-2 mb-2 align-items-center">
+      <div class="d-flex gap-2" id="topic-toggle">
+        <button class="btn btn-sm btn-outline-primary active" data-form="series">Series</button>
+        <button class="btn btn-sm btn-outline-primary" data-form="film">Film</button>
+      </div>
+      <div class="form-check ms-3 mb-0">
+        <input class="form-check-input" type="checkbox" id="topic-sig-only" checked>
+        <label class="form-check-label small" for="topic-sig-only">仅显示显著主题</label>
+      </div>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-sm table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>主题</th>
+            <th class="text-end">命中数</th>
+            <th class="text-end">Cramér's V</th>
+            <th>最高平台</th>
+            <th>最低平台</th>
+            <th>Bonferroni</th>
+          </tr>
+        </thead>
+        <tbody id="topic-body"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/association.js') }}"></script>
+{% endblock %}

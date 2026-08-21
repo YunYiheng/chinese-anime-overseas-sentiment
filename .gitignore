@@ -1,0 +1,65 @@
+# ===== 密钥（绝不提交）=====
+.env
+X API.txt
+
+# ===== Claude Code 本地配置 =====
+.claude/settings.local.json
+
+# ===== Python 缓存 =====
+__pycache__/
+*.pyc
+*.pyo
+
+# ===== 中间产物数据（01-05 管线可重生成）=====
+01_*.csv
+02_*.csv
+03_*.csv
+04_*.csv
+05_*.csv
+*_sentiment_final.csv
+*_topic_labeled.csv
+*_probe*.csv
+mal_probe_reviews.csv
+rotten_tomatoes_reviews_all.csv
+
+# ===== 中间分析表 / 人工复核 / 主题汇总 =====
+cleaning_audit.xlsx
+eda_*.xlsx
+sentiment_baseline_summary.xlsx
+sentiment_review*.xlsx
+*_review_core.xlsx
+*_topic_summary.xlsx
+*_representative_comments.xlsx
+
+# ===== 生成图表（脚本可重生成，报告 docx 已内嵌）=====
+*.png
+
+# ===== 日志与调试状态 =====
+*.log
+*.log.txt
+*log.txt
+*log.json
+mal_ajax_log*.json
+debug/
+state/
+_gpt_extract.txt
+_series_inspect.txt
+_time_fmt.txt
+
+# ===== 旧版 / 过程文档 =====
+GPT方案.docx
+报告建议.docx
+国产动漫海外舆情分析周报_排版修订版.docx
+report_draft_v2.md
+report_restructure_plan.md
+
+# ===== storage 归档中的中间子目录（保留 爬虫与原始数据/ 的代码）=====
+storage/01_02清洗与EDA/
+storage/03情感基线/
+storage/04感情分析/
+storage/05主题分析/
+storage/06_07评论翻译与周报生成/
+storage/第一版周报与相关文件/
+storage/国外国产动漫舆情采集项目办事流程.docx
+storage/新建 DOCX 文档.docx
+storage/__pycache__/
