@@ -1,0 +1,12 @@
+# Render Blueprint —— 一键部署国产动画海外舆情看板
+# 连接私有仓库后，Render 会自动读取本文件并创建 Web Service。
+services:
+  - type: web
+    name: chinese-anime-overseas-sentiment
+    runtime: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn dashboard.app:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0

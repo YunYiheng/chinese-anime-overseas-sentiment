@@ -5,12 +5,20 @@ app.py —— Flask 入口：负责路由 + 提供 JSON API。
 Series 与 Film 共用同一套页面模板 / JS / 接口（form 参数区分），
 保证两层布局、交互、视觉风格完全一致。
 
-运行：cd dashboard && python app.py
+本地运行：cd dashboard && python app.py
 打开：http://127.0.0.1:5000
+
+云部署（Render）：gunicorn dashboard.app:app --bind 0.0.0.0:$PORT
+（本文件最后的 app.run 只在直接 python 运行时生效；gunicorn 会跳过它）
 """
+import os
+
 from flask import Flask, jsonify, render_template, request, abort
 
-import analytics
+try:
+    import analytics  # 本地：cd dashboard && python app.py（cwd 在 dashboard/ 下）
+except ImportError:
+    import dashboard.analytics as analytics  # 云部署：gunicorn dashboard.app:app（cwd 在项目根）
 
 app = Flask(__name__)
 
@@ -102,5 +110,6 @@ def api_comments():
 
 
 if __name__ == "__main__":
-    # debug=True 便于开发期改代码自动重载；交付时可关掉
-    app.run(debug=True)
+    # 本地直接 python app.py 时：debug=True 便于开发期改代码自动重载。
+    # 生产（gunicorn）不会进入这个分支，而是用 render.yaml 里的启动命令。
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)), debug=True)

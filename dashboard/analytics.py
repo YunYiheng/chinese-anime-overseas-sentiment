@@ -8,7 +8,10 @@ from collections import Counter
 
 import pandas as pd
 
-import data_loader as dl
+try:
+    import data_loader as dl  # 本地：python app.py
+except ImportError:
+    import dashboard.data_loader as dl  # 云部署：gunicorn dashboard.app:app
 
 # 情感展示顺序（与报告三口径图一致：正面/中性/混合/负面）
 SENT_ORDER = ["positive", "neutral", "mixed", "negative"]

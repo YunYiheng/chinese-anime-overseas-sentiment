@@ -1,5 +1,6 @@
 # ===== 核心（Dashboard 运行必需）=====
 flask>=3.0
+gunicorn>=21.2
 pandas>=2.2
 numpy>=1.26
 openpyxl>=3.1
